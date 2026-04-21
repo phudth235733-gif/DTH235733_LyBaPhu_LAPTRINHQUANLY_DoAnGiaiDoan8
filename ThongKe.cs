@@ -503,5 +503,25 @@ namespace QuanLyQuanNet
             g.DrawString("TỔNG DOANH THU:", fontDam, Brushes.Red, margin + 400, yPos);
             g.DrawString(tongTien.ToString("#,##0") + " VNĐ", fontDam, Brushes.Red, margin + 600, yPos);
         }
+
+        private void chartThongKe_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnMember_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDoanhThu_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnPCHD_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

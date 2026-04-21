@@ -23,15 +23,17 @@ namespace QuanLyQuanNet
         ThongKe trangThongKe;
         TrangGiaoDich trangGD;
         private ucKhachHang trangKhachHang;
-        private GiaoCa trangGiaoCa; // Thêm form Giao Ca vào đây
-        Form formDangNhap;
+        private GiaoCa trangGiaoCa;
+        private Kho trangKho;
+        // ĐÃ XÓA DÒNG KHAI BÁO KHO HÀNG Ở ĐÂY VÌ MÌNH KHÔNG DÙNG USERCONTROL NỮA
 
+        Form formDangNhap;
         string quyenHan = "";
         string tenNhanVien = "";
         string duongDanAnh = "";
 
         // ==========================================
-        // HÀM KHỞI TẠO (ĐÃ NÂNG CẤP NHẬN TÊN & ẢNH)
+        // HÀM KHỞI TẠO
         // ==========================================
         public Form1(Form frmLogin, string quyen, string hoTen = "", string linkAnh = "")
         {
@@ -54,7 +56,6 @@ namespace QuanLyQuanNet
             this.WindowState = FormWindowState.Maximized;
             LoadDanhSachMay();
 
-            // KÍCH HOẠT RADAR CHẠY NGẦM
             Timer timerDongBo = new Timer();
             timerDongBo.Interval = 3000;
             timerDongBo.Tick += (s, ev) => { DongBoTrangThaiMay(); };
@@ -62,7 +63,6 @@ namespace QuanLyQuanNet
 
             LoadCacMayDangHoatDongTuSQL();
 
-            // THUẬT TOÁN PHÂN QUYỀN VÀ HIỂN THỊ TÊN TRÊN THANH TIÊU ĐỀ
             if (quyenHan == "Nhân Viên")
             {
                 btnThongKe.Enabled = false;
@@ -73,18 +73,6 @@ namespace QuanLyQuanNet
             {
                 this.Text = $"Phần mềm Quản Lý Quán Net - Trực máy: CHỦ QUÁN ({tenNhanVien})";
             }
-
-            // HIỂN THỊ ẢNH ĐẠI DIỆN NẾU CÓ (Mở comment nếu ní có vẽ picAvatar ngoài Design)
-            /*
-            try
-            {
-                if (System.IO.File.Exists(duongDanAnh))
-                {
-                    picAvatar.Image = Image.FromFile(duongDanAnh);
-                }
-            }
-            catch { }
-            */
         }
 
         // ==========================================
@@ -153,7 +141,7 @@ namespace QuanLyQuanNet
         }
 
         // ==========================================
-        // CÁC NÚT CHỨC NĂNG CHÍNH (ĐÃ TÍCH HỢP MYSQL)
+        // CÁC NÚT CHỨC NĂNG CHÍNH
         // ==========================================
         private void btnBatDau_Click(object sender, EventArgs e)
         {
@@ -219,10 +207,6 @@ namespace QuanLyQuanNet
                             new MySqlParameter("@nguon", "Máy Trạm")
                         };
                         db.Execute(sql, p);
-
-                        string tgbd = tramMay.ThoiGianBatDau.ToString("HH:mm");
-                        string tgsd = string.Format("{0:D2}:{1:D2}:{2:D2}", (int)thoiGianDaChoi.TotalHours, thoiGianDaChoi.Minutes, thoiGianDaChoi.Seconds);
-                        string tienHienThi = tongTienGio.ToString("#,##0");
 
                         tramMay.Tag = "Trong";
                         tramMay.TienTraTruoc = 0;
@@ -323,9 +307,6 @@ namespace QuanLyQuanNet
             }
         }
 
-        // ==========================================
-        // HÀM CHUNG MỞ FORM DỊCH VỤ (NHÚNG VÀO VIỀN ĐEN)
-        // ==========================================
         private void MoFormDichVu()
         {
             string mayDangChon = cmbChonPC.Text;
@@ -353,9 +334,6 @@ namespace QuanLyQuanNet
         private void btnDichVuMay_Click(object sender, EventArgs e) => MoFormDichVu();
         private void btnGoiMon_Click(object sender, EventArgs e) => MoFormDichVu();
 
-        // ==========================================
-        // CÁC HÀM HIỆN FORM MINI
-        // ==========================================
         private string HienThiFormChuyenMay(List<string> danhSachMayTrong)
         {
             Form prompt = new Form() { Width = 300, Height = 180, FormBorderStyle = FormBorderStyle.FixedDialog, Text = "Chuyển Máy", StartPosition = FormStartPosition.CenterScreen, TopMost = true };
@@ -388,21 +366,24 @@ namespace QuanLyQuanNet
             if (trangThongKe != null) trangThongKe.Visible = false;
             if (trangGD != null) trangGD.Visible = false;
             if (trangKhachHang != null) trangKhachHang.Visible = false;
-            if (trangGiaoCa != null) trangGiaoCa.Visible = false; // Xóa luôn trang Giao Ca
+            if (trangGiaoCa != null) trangGiaoCa.Visible = false;
+            if (trangKho != null) trangKho.Visible = false;
 
-            // Ẩn luôn 2 panel bên phải (Dành cho các trang full màn hình)
+            // Ẩn 2 panel hiển thị PC mặc định
             guna2Panel2.Visible = false;
             guna2Panel3.Visible = false;
+
+            // Nếu ní vẽ Panel Kho hàng trên Form1 (ví dụ tên pnlKhoHang) thì nhét nó vào đây để giấu:
+            // pnlKhoHang.Visible = false;
         }
 
         // ==========================================
-        // CHUYỂN TRANG BẰNG DOCK FILL (ĐÃ NÂNG CẤP)
+        // CHUYỂN TRANG BẰNG DOCK FILL
         // ==========================================
         private void btnViTriPC_Click(object sender, EventArgs e)
         {
             AnTatCaCacTrang();
 
-            // Xóa form Dịch Vụ đang nằm đè lên
             for (int i = guna2Panel1.Controls.Count - 1; i >= 0; i--)
             {
                 if (guna2Panel1.Controls[i] is frmDichVu)
@@ -473,12 +454,28 @@ namespace QuanLyQuanNet
                 guna2Panel1.Controls.Add(trangGiaoCa);
             }
 
-            // GỌI HÀM BƠM DỮ LIỆU VÀO FORM GIAO CA TRƯỚC KHI HIỂN THỊ
-            // (Giả sử NV vào ca từ 6 tiếng trước - Có thể thay bằng biến lưu giờ thật lúc Login)
             trangGiaoCa.ThietLapThongTin(tenNhanVien, DateTime.Now.AddHours(-6));
-
             trangGiaoCa.BringToFront();
             trangGiaoCa.Visible = true;
+        }
+
+        // ==========================================
+        // SỰ KIỆN NÚT KHO HÀNG (SỬA LẠI ĐỂ DÙNG PANEL TRỰC TIẾP TRÊN FORM)
+        // ==========================================
+        private void btnKhoHang_Click(object sender, EventArgs e)
+        {
+            AnTatCaCacTrang();
+
+            // Nếu trang Kho chưa được tạo thì tạo mới nó
+            if (trangKho == null)
+            {
+                trangKho = new Kho(); // Triệu hồi cái UserControl tên Kho của ní
+                trangKho.Dock = DockStyle.Fill; // Ép nó phình to lấp đầy màn hình
+                guna2Panel1.Controls.Add(trangKho); // Nhét nó vào khung chính
+            }
+
+            trangKho.BringToFront(); // Lôi nó lên mặt tiền
+            trangKho.Visible = true; // Mở đèn cho nó sáng
         }
 
         // ==========================================
@@ -607,6 +604,11 @@ namespace QuanLyQuanNet
                 }
             }
             catch (Exception) { }
+        }
+
+        private void guna2Button1_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 

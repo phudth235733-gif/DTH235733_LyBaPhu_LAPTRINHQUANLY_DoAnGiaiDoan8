@@ -61,6 +61,7 @@
             this.btnGiaoDich = new Guna.UI2.WinForms.Guna2Button();
             this.btnThongKe = new Guna.UI2.WinForms.Guna2Button();
             this.btnViTriPC = new Guna.UI2.WinForms.Guna2Button();
+            this.btnKhoHang = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvThongKe)).BeginInit();
@@ -538,12 +539,32 @@
             this.btnViTriPC.Text = "Vị Trí PC";
             this.btnViTriPC.Click += new System.EventHandler(this.btnViTriPC_Click);
             // 
+            // btnKhoHang
+            // 
+            this.btnKhoHang.BorderRadius = 15;
+            this.btnKhoHang.BorderStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            this.btnKhoHang.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            this.btnKhoHang.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnKhoHang.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnKhoHang.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnKhoHang.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnKhoHang.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(122)))), ((int)(((byte)(122)))), ((int)(((byte)(122)))));
+            this.btnKhoHang.Font = new System.Drawing.Font("Bahnschrift Condensed", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.btnKhoHang.ForeColor = System.Drawing.Color.White;
+            this.btnKhoHang.Location = new System.Drawing.Point(12, 544);
+            this.btnKhoHang.Name = "btnKhoHang";
+            this.btnKhoHang.Size = new System.Drawing.Size(180, 45);
+            this.btnKhoHang.TabIndex = 12;
+            this.btnKhoHang.Text = "Kho Hàng";
+            this.btnKhoHang.Click += new System.EventHandler(this.btnKhoHang_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1137, 632);
+            this.Controls.Add(this.btnKhoHang);
             this.Controls.Add(this.btnKhachHang);
             this.Controls.Add(this.btnGiaoCa);
             this.Controls.Add(this.btnGoiMon);
@@ -598,6 +619,7 @@
         private Guna.UI2.WinForms.Guna2Button btnGoiMon;
         private Guna.UI2.WinForms.Guna2Button btnGiaoCa;
         private Guna.UI2.WinForms.Guna2Button btnKhachHang;
+        private Guna.UI2.WinForms.Guna2Button btnKhoHang;
     }
 }
 
